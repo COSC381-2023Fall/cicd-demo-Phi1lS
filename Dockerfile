@@ -5,13 +5,16 @@ FROM python:3.9
 WORKDIR /code
 
 # Copy the requirements file into the container at /code
-COPY requirements.txt /code/
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Copy the contents of the local app directory to the /code directory in the container
-COPY app/ /code/
+# Copy the contents of the local app directory to the /code/app directory in the container (Changed this from previous Dockerfile)
+COPY app/ ./app
 
-# Run app.py when the container launches
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+# Set the working directory to /code/app where main.py is located
+WORKDIR /code/app
+
+# Run app when the container launches
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
