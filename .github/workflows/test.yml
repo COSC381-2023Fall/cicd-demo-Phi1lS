@@ -1,0 +1,32 @@
+name: Test
+run-name: ${{ github.actor }} is testing
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - run: python3 -m pip install --upgrade pip
+      - run: python3 -m pip install pytest
+      - run: pip install -r requirements.txt
+      - run: python3 --version
+      - run: pytest --version
+      - run: pytest
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: akhileshns/heroku-deploy@v3.12.13 # This is the action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "polar-crag-69052" # Must be unique in Heroku
+          heroku_email: "psolis@emich.edu"
+          usedocker: true
