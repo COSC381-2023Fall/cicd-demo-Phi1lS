@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: 3.9
       - run: python3 -m pip install --upgrade pip
-      - run: python3 -m pip install pytest
+      - run: python3 -m pip install pytest pytest-mock
       - run: pip install -r requirements.txt
       - run: python3 --version
       - run: pytest --version
